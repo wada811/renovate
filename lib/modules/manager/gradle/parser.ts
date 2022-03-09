@@ -627,8 +627,13 @@ function tryMatch({
   variables,
   packageFile,
 }: MatchConfig): SyntaxHandlerOutput {
+  logger.debug({ tokens }, `tryMatch: packageFile: ${packageFile}`);
   for (const { matchers, handler } of matcherConfigs) {
     const tokenMap = matchTokens(tokens, matchers);
+    logger.debug(
+      { matchers, tokenMap },
+      `tryMatch: packageFile: ${packageFile}`
+    );
     if (tokenMap) {
       const result = handler({
         packageFile,
@@ -655,6 +660,11 @@ export function parseGradle(
 
   const tokens = tokenize(input);
   let prevTokensLength = tokens.length;
+  tokens.forEach((token) => {
+    logger.debug(
+      `parseGradle: packageFile: ${packageFile}, token.type: ${token.type}, token.value: ${token.value}`
+    );
+  });
   while (tokens.length) {
     const matchResult = tryMatch({ tokens, variables: vars, packageFile });
     if (matchResult?.deps?.length) {

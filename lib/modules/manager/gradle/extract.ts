@@ -76,6 +76,7 @@ export async function extractAllPackageFiles(
           vars: gradleVars,
         } = parseGradle(content, vars, packageFile);
         urls.forEach((url) => {
+          logger.debug(`extractAllPackageFiles: registryUrl: ${url}`);
           if (!registryUrls.includes(url)) {
             registryUrls.push(url);
           }
